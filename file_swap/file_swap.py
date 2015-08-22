@@ -6,8 +6,9 @@ by @peteyreplies
 '''
 
 ##import libraries 
-import os
-import shutil
+import os										#to walk dirs 
+import shutil									#to copy command 
+from datetime import datetime, timedelta, date 	#to convert time
 
 ##where are the files, & where do they need to be? 
 base_dir = '../../DATADUMP/GeoCen/Test_Docs'
@@ -22,12 +23,18 @@ def return_contents(dir_path):
 	for n in contents:
 		if '.DS_Store' in n:
 			contents.remove(n)
+	print 'walking ' + dir_path
 	return contents
 
 def check_incoming(response_path):
 	'''checks if a document is incoming by reading first line for outgoing message
 	if it is incoming, return true; else, false'''
-
+	f = open(response_path)
+	lines = f.read().splitlines()
+	if lines[0] == '':
+		del lines[0]
+	print 'checking ' + response_path + ' for incoming'
+	return 'To Whom' not in lines[0]
 
 
 def copy_file(response_path, entity_name, r):
@@ -36,7 +43,7 @@ def copy_file(response_path, entity_name, r):
 
 	new_location = new_dir + '/' + entity_name + '_' + r
 	shutil.copy(response_path,new_location)
-	print entity_name + '_' + r + 'copied successfully'
+	print entity_name + '_' + r + ' copied successfully'
 
 ##main loop 
  
@@ -57,15 +64,15 @@ for c in response_categories:
 		for r in entity_responses:
 			response_path = entity_dir + '/' + r
 
-		#if it's a PDF, copy it 
-		if 'pdf' in r[-3:]:
-			copy_file(response_path, entity_name, r)
+			#if it's a PDF, copy it, saving just the title of the doc  
+			if 'pdf' in r[-3:]:
+				copy_file(response_path, entity_name, r.split()[-1])
 
-		#if it's an incoming txt file, copy it 
-		if check_incoming(response_path):
-			copy_file(response_path, entity_name, r)
+			#if it's an incoming txt file, copy it 
+			if check_incoming(response_path):
+				copy_file(response_path, entity_name, r)
 
-
+print 'finished' 
 
 
 
