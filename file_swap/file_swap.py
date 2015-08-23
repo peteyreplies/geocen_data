@@ -10,8 +10,8 @@ import os										#to walk dirs
 import shutil									#to copy command 
 
 ##where are the files, & where do they need to be? 
-base_dir = '~/Desktop/scratch/GeoCen/old_docs'
-new_dir = '~/Desktop/scratch/GeoCen/renamed_docs'
+base_dir = '../../../../Desktop/scratch/GeoCen/old_docs'
+new_dir = '../../../../Desktop/scratch/GeoCen/renamed_docs'
 
 ##define some functions
 def return_contents(dir_path):
@@ -22,7 +22,7 @@ def return_contents(dir_path):
 	for n in contents:
 		if '.DS_Store' in n:
 			contents.remove(n)
-	print 'walking ' + dir_path
+	#print 'walking ' + dir_path
 	return contents
 
 def check_incoming(response_path):
@@ -30,10 +30,13 @@ def check_incoming(response_path):
 	if it is incoming, return true; else, false'''
 	f = open(response_path)
 	lines = f.read().splitlines()
-	if lines[0] == '':
-		del lines[0]
-	print 'checking ' + response_path + ' for incoming'
-	return 'To Whom' not in lines[0]
+	try:
+		if lines[0] == '':
+			del lines[0]
+		#print 'checking ' + response_path + ' for incoming'
+		return 'To Whom' not in lines[0]
+	except IndexError: 
+		pass
 
 
 def copy_file(response_path, entity_name, r):
@@ -42,32 +45,40 @@ def copy_file(response_path, entity_name, r):
 
 	new_location = new_dir + '/' + entity_name + '_' + r
 	shutil.copy(response_path,new_location)
-	print entity_name + '_' + r + ' copied successfully'
+	#print entity_name + '_' + r + ' copied successfully'
 
 ##main loop 
  
 
 #find each entity within each category 
+i = 0 
+
 responding_entities = return_contents(base_dir)
 for e in responding_entities:
 	#get the name of the entity
 	entity_dir = base_dir + '/' + e
-	entity_name = e[7:-5]
-	entity_responses = return_contents(entity_dir)
+	entity_name = e[7:-1]
+
+	#debug statement 
+	print 'working within entity ' + entity_name
 	
-	#find each response within each entity 
+	#find each response within each entity
+	entity_responses = return_contents(entity_dir) 
 	for r in entity_responses:
 		response_path = entity_dir + '/' + r
 
-		#if it's a PDF, copy it, saving just the title of the doc  
-		if 'pdf' in r[-3:]:
-			copy_file(response_path, entity_name, r.split()[-1])
+		#debug statement 
+		i = i + 1
+		print 'working on document ' + str(i) + ': ' + entity_name + '_' + r
 
+		#if it's not a text file, copy it, saving just the title of the doc  
+		if 'txt' not in r[-3:]:
+			copy_file(response_path, entity_name, r.split()[-1])
 		#if it's an incoming txt file, copy it 
-		if check_incoming(response_path):
+		elif check_incoming(response_path):
 			copy_file(response_path, entity_name, r)
 
-print 'finished' 
+print 'finished processing ' + str(i) + ' documents' 
 
 
 
