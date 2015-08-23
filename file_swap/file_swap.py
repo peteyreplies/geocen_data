@@ -8,11 +8,10 @@ by @peteyreplies
 ##import libraries 
 import os										#to walk dirs 
 import shutil									#to copy command 
-from datetime import datetime, timedelta, date 	#to convert time
 
 ##where are the files, & where do they need to be? 
-base_dir = '../../DATADUMP/GeoCen/Test_Docs'
-new_dir = '../../DATADUMP/GeoCen/Renamed_Docs'
+base_dir = '~/Desktop/scratch/GeoCen/old_docs'
+new_dir = '~/Desktop/scratch/GeoCen/renamed_docs'
 
 ##define some functions
 def return_contents(dir_path):
@@ -47,30 +46,26 @@ def copy_file(response_path, entity_name, r):
 
 ##main loop 
  
-#find each category of response 
-response_categories = return_contents(base_dir)
-for c in response_categories:
-	cat_dir = base_dir + '/' + c
-	responding_entities = return_contents(cat_dir)
 
-	#find each entity within each category 
-	for e in responding_entities:
-		#get the name of the entity
-		entity_dir = cat_dir + '/' + e
-		entity_name = e[7:-5]
-		entity_responses = return_contents(entity_dir)
-		
-		#find each response within each entity 
-		for r in entity_responses:
-			response_path = entity_dir + '/' + r
+#find each entity within each category 
+responding_entities = return_contents(base_dir)
+for e in responding_entities:
+	#get the name of the entity
+	entity_dir = base_dir + '/' + e
+	entity_name = e[7:-5]
+	entity_responses = return_contents(entity_dir)
+	
+	#find each response within each entity 
+	for r in entity_responses:
+		response_path = entity_dir + '/' + r
 
-			#if it's a PDF, copy it, saving just the title of the doc  
-			if 'pdf' in r[-3:]:
-				copy_file(response_path, entity_name, r.split()[-1])
+		#if it's a PDF, copy it, saving just the title of the doc  
+		if 'pdf' in r[-3:]:
+			copy_file(response_path, entity_name, r.split()[-1])
 
-			#if it's an incoming txt file, copy it 
-			if check_incoming(response_path):
-				copy_file(response_path, entity_name, r)
+		#if it's an incoming txt file, copy it 
+		if check_incoming(response_path):
+			copy_file(response_path, entity_name, r)
 
 print 'finished' 
 
