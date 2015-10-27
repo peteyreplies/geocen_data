@@ -76,7 +76,7 @@ while next_url:
         				'agency_jurisdiction':agency_data['jurisdiction'],
         				'agency_type':agency_data['types'][0].encode('ascii'),
         				'agency_address':agency_data['address'].encode('ascii'),
-        				#'agency_phone':int(agency_data['phone']),
+        				'agency_phone':str(agency_data['phone']).encode('ascii'),
         }
         thisEntity.update(tempAgency)
 
@@ -87,10 +87,10 @@ while next_url:
         any_response_received = False 
         for c in communications:
         	firstResponse = {
-        		'first_response_date':'None',
-        		'first_responder_name':'None',
-        		'requests_until_first_response':'None',
-        		'days_until_first_respone':'None',
+        		'first_response_date':'',
+        		'first_responder_name':'',
+        		'requests_until_first_response':'',
+        		'days_until_first_respone':'',
         		}
         	if c['response'] == False:
         		i = i + 1
