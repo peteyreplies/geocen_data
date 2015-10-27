@@ -10,8 +10,8 @@ import os										#to walk dirs
 import shutil									#to copy command 
 
 ##where are the files, & where do they need to be? 
-base_dir = '../../../../Desktop/scratch/GeoCen/old_docs'
-new_dir = '../../../../Desktop/scratch/GeoCen/renamed_docs'
+base_dir = '../../../Desktop/scratch/GeoCen/old_docs'
+new_dir = '../../../Desktop/scratch/GeoCen/renamed_docs'
 
 ##define some functions
 def return_contents(dir_path):
