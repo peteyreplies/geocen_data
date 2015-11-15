@@ -77,9 +77,13 @@ while next_url:
         				'agency_type':agency_data['types'][0].encode('ascii'),
         				'agency_address':agency_data['address'].encode('ascii'),
         				'agency_phone':str(agency_data['phone']).encode('ascii'),
+                        'agency_zip':agency_data['address'].split()[-1].encode('ascii'),
         }
         thisEntity.update(tempAgency)
-
+        #fix school name if necessary
+        if tempAgency['agency_type'] == 'School District':
+            p = thisEntity['agency_name']
+            thisEntity['agency_name'] = p[:-8]
 
         # get communications third
         communications = request_data['communications']
