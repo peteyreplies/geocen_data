@@ -83,7 +83,8 @@ while next_url:
         #fix school name if necessary
         if tempAgency['agency_type'] == 'School District':
             p = thisEntity['agency_name']
-            thisEntity['agency_name'] = p[:-8]
+            if p.split()[-1] == 'Schools':
+                thisEntity['agency_name'] = p[:-8]
 
         # get communications third
         communications = request_data['communications']
