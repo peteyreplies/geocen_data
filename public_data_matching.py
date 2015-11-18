@@ -56,6 +56,7 @@ for d in muckrock_data:
 	d['conum'] = ''			#ANSI County Code
 	d['fedID'] = ''			#unique ID in associated dataset 
 	d['total_librarians'] = ''	#num of total librarians; only available for libraries 
+	d['mls-ala'] = ''			#num of mls-ala credentialed librarians 
 	d['computer_users']	= ''	#users of public computers per year; only available for libraries 
 
 
@@ -75,6 +76,7 @@ for d in muckrock_data:
 		d['conum'] = lib_match['FIPSPLAC']
 		d['fedID'] = lib_match['FSCSKEY']
 		d['total_librarians'] = lib_match['LIBRARIA']
+		d['mls-ala'] = lib_match['MASTER']
 		d['computer_users'] = lib_match['PITUSR']	 
 
 	#otherwise, look in the school data 
